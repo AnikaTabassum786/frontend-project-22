@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { auth } from '../../firebase.init';
-import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link } from 'react-router';
-
 
 const SignUp = () => {
 
@@ -19,17 +18,18 @@ const SignUp = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
 
+    const name = e.target.name.value
+    const photo = e.target.photo.value
     const email = e.target.email.value
     const password = e.target.password.value
     const terms = e.target.terms.checked
 
-    console.log(email, password, terms)
+    console.log(name,photo,email, password, terms)
 
     if (terms === false) {
       setError('Accept  terms and condition')
       return
     }
-
 
     setError('')
     setSuccess(false) // is used inside handleSubmit to reset the success status before starting a new submission.
@@ -54,12 +54,25 @@ const SignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result)
+        
         // Verify Email
-       
         sendEmailVerification(auth.currentUser)
         .then(()=>{
           setSuccess(true)
           alert('We sent a verification email. Please check your email')
+        })
+
+        const profile ={
+          displayName:name,
+          photoURL: photo
+        }
+
+        updateProfile(auth.currentUser,profile)
+        .then(()=>{
+          console.log('User Profile Updated')
+        })
+        .catch((error)=>{
+setError(error.message)
         })
 
       })
@@ -71,14 +84,22 @@ const SignUp = () => {
   }
   return (
     <div>
-      <div className="hero min-h-70vh ">
+      <div className="hero min-h-50vh ">
         <div className="hero-content flex-col lg:flex-row-reverse">
 
           <div className="card bg-base-100  max-w-sm shrink-0 ">
             <div className="card-body">
               <form onSubmit={handleSubmit}>
-                <label className="label">Email</label>
+
+                <label className="label">Name</label>
+                <input type="text" name='name' className="input mt-2" placeholder="Name" />
+
+                <label className="label mt-4">Photo URL</label>
+                <input type="text" name='photo' className="input mt-2" placeholder="Photo URL" />
+
+                <label className="label mt-4">Email</label>
                 <input type="email" name='email' className="input mt-2" placeholder="Email" />
+
                 <label className="label mt-4">Password</label>
                 <div className='flex justify-center items-center relative mt-2'>
                   <input
@@ -93,7 +114,7 @@ const SignUp = () => {
                     }
                   </div>
                 </div>
-                <div className='mt-4'><a className="link link-hover">Forgot password?</a></div>
+                {/* <div className='mt-4'><a className="link link-hover">Forgot password?</a></div> */}
                 <label className="label mt-4">
                   <input name='terms' type="checkbox" className="checkbox" />
                   Accept Terms & Condition
