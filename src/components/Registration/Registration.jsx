@@ -1,4 +1,6 @@
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React from 'react';
+import { auth } from '../../firebase.init';
 
 const Registration = () => {
     const handleRegister=(e)=>{
@@ -7,12 +9,21 @@ const Registration = () => {
           const email = e.target.email.value
           const password= e.target.password.value
           console.log(email,password)
+
+          // Initialize Firebase Authentication and get a reference to the service
+          createUserWithEmailAndPassword(auth, email, password)
+          .then(result => {
+            console.log(result)
+          })
+          .catch(error => {
+            console.log(error)
+          })
     }
     return (
         <div>
 
-            <div className='flex justify-center items-center mt-10'>
-
+            <div className='flex flex-col gap-8 justify-center items-center mt-12'>
+                   <p className=' text-xl font-bold'> Please Registration</p>
                 <form onSubmit={handleRegister}>
                     {/* Email Name */}
                     <label className="input validator">
