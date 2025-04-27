@@ -3,6 +3,7 @@ import { auth } from '../../firebase.init';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { Link } from 'react-router';
 
 
 const SignUp = () => {
@@ -22,9 +23,9 @@ const SignUp = () => {
     const password = e.target.password.value
     const terms = e.target.terms.checked
 
-    console.log(email, password,terms)
+    console.log(email, password, terms)
 
-    if(terms === false){
+    if (terms === false) {
       setError('Accept  terms and condition')
       return
     }
@@ -49,8 +50,6 @@ const SignUp = () => {
       setError('Password Must Have Small Letter')
       return
     }
-
-
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
@@ -94,8 +93,9 @@ const SignUp = () => {
                   Accept Terms & Condition
                 </label>
                 <div className='mt-4'>
-                <button className="btn btn-neutral ">Login</button>
+                  <button className="btn btn-neutral ">Sign Up</button>
                 </div>
+                <p>Already Have an Account <Link to='/login' className='text-blue-600 font-semibold hover:underline'>Login</Link></p>
               </form>
 
               <div>
