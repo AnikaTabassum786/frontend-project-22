@@ -28,6 +28,12 @@ const Navbar = () => {
                         }>
                             Registration
                         </NavLink>
+                        
+                        <NavLink to={'/sign-up'} className={({ isActive }) =>
+                            isActive ? "active text-blue-500 underline" : ""
+                        }>
+                            Sign Up
+                        </NavLink>
                     </ul>
                 </div>
                 <div className="navbar-end">
